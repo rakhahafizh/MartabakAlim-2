@@ -1,0 +1,10 @@
+node_modules/
+tests/
+.git/
+.env.example
+README.md
+*.md
+.editorconfig
+.gitignore
+.gitattributes
+phpunit.xml
