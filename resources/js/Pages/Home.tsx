@@ -238,7 +238,7 @@ export default function Home() {
                   <div className="text-sm text-gray-300">Closing</div>
                 </div>
                 <div className="col-span-2 bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <div className="text-2xl font-bold text-white mb-2">+62 123 123 123</div>
+                  <div className="text-2xl font-bold text-white mb-2">+62 812 2932 6653</div>
                   <div className="text-sm text-gray-300">Contact Us</div>
                 </div>
               </div>
