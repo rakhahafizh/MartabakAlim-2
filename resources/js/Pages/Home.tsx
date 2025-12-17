@@ -89,7 +89,7 @@ export default function Home() {
 
           {/* Content */}
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24 relative z-10 w-full">
-            <div className="max-w-md lg:max-w-sm lg:ml-0">
+            <div className="max-w-sm lg:max-w-xs">
               {/* Text Content - Positioned Left */}
               <div className="space-y-8">
                 <div className="inline-block px-4 py-2 bg-[#D4A574]/10 border border-[#D4A574]/20 rounded-full backdrop-blur-sm">
