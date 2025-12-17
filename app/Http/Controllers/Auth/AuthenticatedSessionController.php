@@ -32,12 +32,16 @@ class AuthenticatedSessionController extends Controller
         // Regenerate CSRF token to ensure it's fresh after login
         $request->session()->regenerateToken();
         
-        // CRITICAL: Force session to be saved to database before redirect
-        // This ensures the new session ID and CSRF token are persisted
-        // before the user is redirected to the next page
+        // CRITICAL: Manually set XSRF-TOKEN cookie to match the new session token
+        // This ensures the cookie is synchronized immediately after regeneration
+        // Without this, Inertia will send the old XSRF-TOKEN causing 419 errors
+        $token = $request->session()->token();
+        cookie()->queue('XSRF-TOKEN', $token, 120, '/', null, true, false, false, 'lax');
+        
+        // Force session to be saved to database before redirect
         $request->session()->save();
         
-        // Small delay to ensure database write completes (for database driver)
+        // Small delay to ensure database write completes
         usleep(100000); // 100ms delay
 
         return redirect()->intended(route('stock.index', absolute: false));
