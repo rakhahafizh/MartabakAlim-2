@@ -28,6 +28,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        
+        // Regenerate CSRF token to ensure it's fresh after login
+        $request->session()->regenerateToken();
 
         return redirect()->intended(route('stock.index', absolute: false));
     }
