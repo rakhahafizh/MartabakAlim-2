@@ -43,10 +43,22 @@ export default function StockCreate() {
       onError: (errors) => {
         setErrors(errors);
         setProcessing(false);
+
+        // Handle 419 CSRF token mismatch error
+        if (errors && typeof errors === 'object' && 'message' in errors) {
+          const errorMessage = String(errors.message || '');
+          if (errorMessage.includes('419') || errorMessage.includes('CSRF') || errorMessage.includes('expired')) {
+            // Reload page to get fresh CSRF token and retry
+            alert('Session expired. Refreshing page...');
+            window.location.reload();
+          }
+        }
       },
       onFinish: () => {
         setProcessing(false);
-      }
+      },
+      preserveScroll: true,
+      preserveState: true
     });
   };
 

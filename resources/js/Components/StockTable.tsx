@@ -34,7 +34,18 @@ export default function StockTable({ items, onEdit }: StockTableProps) {
 
   const handleDelete = (item: StockItem) => {
     if (confirm(`Apakah Anda yakin ingin menghapus ${item.item_name}?`)) {
-      router.delete(`/stock-opname/${item.id}`);
+      router.delete(`/stock-opname/${item.id}`, {
+        onError: (errors) => {
+          // Handle 419 CSRF token mismatch error
+          if (errors && typeof errors === 'object' && 'message' in errors) {
+            const errorMessage = String(errors.message || '');
+            if (errorMessage.includes('419') || errorMessage.includes('CSRF') || errorMessage.includes('expired')) {
+              alert('Session expired. Refreshing page...');
+              window.location.reload();
+            }
+          }
+        }
+      });
     }
   };
 
