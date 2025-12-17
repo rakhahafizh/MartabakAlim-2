@@ -23,7 +23,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): Response
     {
         $request->authenticate();
 
@@ -32,19 +32,14 @@ class AuthenticatedSessionController extends Controller
         // Regenerate CSRF token to ensure it's fresh after login
         $request->session()->regenerateToken();
         
-        // CRITICAL: Manually set XSRF-TOKEN cookie to match the new session token
-        // This ensures the cookie is synchronized immediately after regeneration
-        // Without this, Inertia will send the old XSRF-TOKEN causing 419 errors
-        $token = $request->session()->token();
-        cookie()->queue('XSRF-TOKEN', $token, 120, '/', null, true, false, false, 'lax');
-        
         // Force session to be saved to database before redirect
         $request->session()->save();
         
-        // Small delay to ensure database write completes
-        usleep(100000); // 100ms delay
-
-        return redirect()->intended(route('stock.index', absolute: false));
+        // CRITICAL: Use Inertia::location() to force FULL PAGE RELOAD
+        // This ensures the page is loaded with fresh CSRF token from the server
+        // instead of using stale token from Inertia props cache
+        // This is the ONLY way to ensure CSRF token synchronization after login
+        return Inertia::location(route('stock.index'));
     }
 
     /**
