@@ -69,69 +69,76 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Hero Section - Full Width with Background Image */}
-        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0">
-            <img
-              src="/images/Home.png"
-              alt="Martabak Alim"
-              className="w-full h-full object-cover"
-            />
-            {/* Multi-layer Gradient Overlay for smooth transition */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50"></div>
+        {/* Hero Section - Premium Split Screen Design */}
+        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F1E8] to-[#EBE4D5]">
+          {/* Background Image - 60% Right Side */}
+          <div className="absolute top-0 right-0 w-[60%] h-full">
+            <div className="relative w-full h-full">
+              <img
+                src="/images/Home.png"
+                alt="Martabak Alim"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                style={{ objectPosition: 'center center' }}
+              />
+              {/* Smooth Multi-layer Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7]/50 via-transparent to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent"></div>
+            </div>
           </div>
 
           {/* Content */}
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-32 relative z-10">
-            <div className="max-w-2xl space-y-8">
-              <div className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
-                <span className="text-sm font-semibold text-[#D4A574] tracking-wider">AUTHENTIC BEKASI TASTE</span>
-              </div>
-
-              <h1 className="text-6xl lg:text-8xl font-black text-white leading-tight drop-shadow-2xl" style={{ fontFamily: 'Playfair Display, serif' }}>
-                MARTABAK
-                <br />
-                <span className="text-[#D4A574]">HANDMADE</span>
-                <br />
-                PERFECTION
-              </h1>
-
-              <p className="text-xl text-gray-100 leading-relaxed max-w-xl drop-shadow-lg">
-                Dibuat oleh orang-orang profesional dan berpengalaman. Semua makanan terbuat dari bahan berkualitas dan tentunya halal.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <a
-                  href="#order"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-[#D4A574] text-[#2C2416] font-bold text-lg rounded-lg hover:bg-[#B8864F] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <span>ORDER NOW</span>
-                  <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-                <a
-                  href="#menu"
-                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/80 text-white font-bold text-lg rounded-lg hover:bg-white hover:text-[#2C2416] transition-all duration-300 backdrop-blur-sm"
-                >
-                  VIEW MENU
-                </a>
-              </div>
-
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/30">
-                <div>
-                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
-                  <div className="text-sm text-gray-200">Halal</div>
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24 relative z-10 w-full">
+            <div className="max-w-md lg:max-w-sm lg:ml-0">
+              {/* Text Content - Positioned Left */}
+              <div className="space-y-8">
+                <div className="inline-block px-4 py-2 bg-[#D4A574]/10 border border-[#D4A574]/20 rounded-full backdrop-blur-sm">
+                  <span className="text-sm font-semibold text-[#B8864F] tracking-wider">AUTHENTIC BEKASI TASTE</span>
                 </div>
-                <div>
-                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
-                  <div className="text-sm text-gray-200">Daily Made</div>
+
+                <h1 className="text-5xl lg:text-6xl xl:text-7xl font-black text-[#2C2416] leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  MARTABAK
+                  <br />
+                  <span className="text-[#D4A574]">HANDMADE</span>
+                  <br />
+                  PERFECTION
+                </h1>
+
+                <p className="text-lg text-[#5C4A33] leading-relaxed">
+                  Dibuat oleh orang-orang profesional dan berpengalaman. Semua makanan terbuat dari bahan berkualitas dan tentunya halal.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <a
+                    href="#order"
+                    className="group inline-flex items-center justify-center px-8 py-4 bg-[#2C2416] text-white font-bold text-lg rounded-xl hover:bg-[#1A1410] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  >
+                    <span>ORDER NOW</span>
+                    <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </a>
+                  <a
+                    href="#menu"
+                    className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2C2416] text-[#2C2416] font-bold text-lg rounded-xl hover:bg-[#2C2416] hover:text-white transition-all duration-300"
+                  >
+                    VIEW MENU
+                  </a>
                 </div>
-                <div>
-                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
-                  <div className="text-sm text-gray-200">Quality</div>
+
+                <div className="grid grid-cols-3 gap-8 pt-8 border-t border-[#E8E4DC]">
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
+                    <div className="text-xs lg:text-sm text-[#8B7355] mt-1">Halal</div>
+                  </div>
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
+                    <div className="text-xs lg:text-sm text-[#8B7355] mt-1">Daily Made</div>
+                  </div>
+                  <div className="text-center lg:text-left">
+                    <div className="text-3xl lg:text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
+                    <div className="text-xs lg:text-sm text-[#8B7355] mt-1">Quality</div>
+                  </div>
                 </div>
               </div>
             </div>
