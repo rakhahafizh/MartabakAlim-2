@@ -13,9 +13,25 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
+import axios from 'axios';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+// Configure Axios to include CSRF token
+const token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = (token as HTMLMetaElement).content;
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+}
+
+// Configure Inertia to use Axios for requests
+router.on('before', () => {
+    const freshToken = document.head.querySelector('meta[name="csrf-token"]');
+    if (freshToken) {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = (freshToken as HTMLMetaElement).content;
+    }
+});
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
