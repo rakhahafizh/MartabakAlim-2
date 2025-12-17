@@ -13,8 +13,7 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createRoot } from 'react-dom/client';
-import { createInertiaApp, router } from '@inertiajs/react';
-import { handleInertiaError } from './utils/errorHandler';
+import { createInertiaApp } from '@inertiajs/react';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -31,10 +30,4 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
-});
-
-// Global error handler for Inertia requests
-router.on('error', (event) => {
-    const error = event.detail.errors;
-    handleInertiaError(error);
 });

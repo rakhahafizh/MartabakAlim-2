@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
 import AppLayout from '@/Components/Layout/AppLayout';
 import Input from '@/Components/UI/Input';
 import Button from '@/Components/UI/Button';
-import { saveFormData, restoreFormData, clearFormData, handleInertiaError } from '@/utils/errorHandler';
 
 interface CreateFormData {
   item_code: string;
@@ -27,36 +26,6 @@ export default function StockCreate() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
 
-  const FORM_KEY = 'stock_create_form';
-
-  // Restore form data on mount
-  useEffect(() => {
-    const restored = restoreFormData(FORM_KEY);
-    if (restored) {
-      setFormData(restored);
-      // Show notification that data was restored
-      const shouldRestore = confirm('We found unsaved data from your previous session. Would you like to restore it?');
-      if (!shouldRestore) {
-        clearFormData(FORM_KEY);
-        setFormData({
-          item_code: '',
-          item_name: '',
-          category: '',
-          unit: '',
-          system_qty: '',
-          location: ''
-        });
-      }
-    }
-  }, []);
-
-  // Auto-save form data whenever it changes
-  useEffect(() => {
-    if (formData.item_code || formData.item_name) {
-      saveFormData(FORM_KEY, formData);
-    }
-  }, [formData]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
@@ -69,15 +38,11 @@ export default function StockCreate() {
 
     router.post('/stock-opname', submitData, {
       onSuccess: () => {
-        // Clear saved form data on success
-        clearFormData(FORM_KEY);
         // Will redirect automatically
       },
       onError: (errors) => {
         setErrors(errors);
         setProcessing(false);
-        // Handle CSRF errors
-        handleInertiaError(errors);
       },
       onFinish: () => {
         setProcessing(false);
