@@ -353,7 +353,7 @@ export default function Home() {
                   <span>PESAN DI GOJEK</span>
                 </a>
                 <a
-                  href="#"
+                  href="https://shopee.co.id/universal-link/now-food/shop/1008047?deep_and_deferred=1&shareChannel=copy_link"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
@@ -362,7 +362,7 @@ export default function Home() {
                   <span>PESAN DI SHOPEEFOOD</span>
                 </a>
                 <a
-                  href="#"
+                  href="https://r.grab.com/g/6-20251217_192822_D8D406FF00744A5BAFC7186724209326_MEXMPS-6-C2CUCXNUBE5JVA"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
@@ -375,33 +375,15 @@ export default function Home() {
 
             {/* Order Buttons - Cikarang */}
             {selectedBranch === 'cikarang' && (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex justify-center">
                 <a
-                  href="#"
+                  href="https://gofood.link/u/R1jrR"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
                 >
                   <img src="/images/gojek.png" alt="Gojek" className="h-5 w-auto mr-3" />
                   <span>PESAN DI GOJEK</span>
-                </a>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/shopee.png" alt="Shopee" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI SHOPEEFOOD</span>
-                </a>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/grab.png" alt="Grab" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI GRAB</span>
                 </a>
               </div>
             )}
