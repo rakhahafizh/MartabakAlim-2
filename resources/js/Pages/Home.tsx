@@ -421,7 +421,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="bg-[#1A1410] text-gray-400 py-8">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center">
-            <p className="text-sm">© 2024 Martabak Alim. All rights reserved.</p>
+            <p className="text-sm">Martabak Alim</p>
           </div>
         </footer>
       </div>
