@@ -69,20 +69,27 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Hero Section */}
-        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F1E8] to-[#EBE4D5]">
-          <div className="absolute top-0 right-0 w-1/2 h-full opacity-5">
-            <div className="absolute top-20 right-20 w-96 h-96 bg-[#D4A574] rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 right-40 w-64 h-64 bg-[#B8864F] rounded-full blur-3xl"></div>
+        {/* Hero Section - Full Width with Background Image */}
+        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img
+              src="/images/Home.png"
+              alt="Martabak Alim"
+              className="w-full h-full object-cover"
+            />
+            {/* Gradient Overlay - Dark from left, transparent to right */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2C2416]/95 via-[#2C2416]/70 to-transparent"></div>
           </div>
 
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div className="space-y-8">
-              <div className="inline-block px-4 py-2 bg-[#D4A574]/10 border border-[#D4A574]/20 rounded-full">
-                <span className="text-sm font-semibold text-[#B8864F] tracking-wider">AUTHENTIC BEKASI TASTE</span>
+          {/* Content */}
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-32 relative z-10">
+            <div className="max-w-2xl space-y-8">
+              <div className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+                <span className="text-sm font-semibold text-[#D4A574] tracking-wider">AUTHENTIC BEKASI TASTE</span>
               </div>
 
-              <h1 className="text-6xl lg:text-7xl font-black text-[#2C2416] leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h1 className="text-6xl lg:text-8xl font-black text-white leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                 MARTABAK
                 <br />
                 <span className="text-[#D4A574]">HANDMADE</span>
@@ -90,14 +97,14 @@ export default function Home() {
                 PERFECTION
               </h1>
 
-              <p className="text-lg text-[#5C4A33] leading-relaxed max-w-lg">
+              <p className="text-xl text-gray-200 leading-relaxed max-w-xl">
                 Dibuat oleh orang-orang profesional dan berpengalaman. Semua makanan terbuat dari bahan berkualitas dan tentunya halal.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a
                   href="#order"
-                  className="group inline-flex items-center justify-center px-8 py-4 bg-[#2C2416] text-white font-semibold rounded-lg hover:bg-[#1A1410] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  className="group inline-flex items-center justify-center px-8 py-4 bg-[#D4A574] text-[#2C2416] font-bold text-lg rounded-lg hover:bg-[#B8864F] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
                 >
                   <span>ORDER NOW</span>
                   <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,35 +113,26 @@ export default function Home() {
                 </a>
                 <a
                   href="#menu"
-                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-[#2C2416] text-[#2C2416] font-semibold rounded-lg hover:bg-[#2C2416] hover:text-white transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white hover:text-[#2C2416] transition-all duration-300"
                 >
                   VIEW MENU
                 </a>
               </div>
 
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-[#E8E4DC]">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
                 <div>
-                  <div className="text-3xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
-                  <div className="text-sm text-[#8B7355]">Halal</div>
+                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
+                  <div className="text-sm text-gray-300">Halal</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
-                  <div className="text-sm text-[#8B7355]">Daily Made</div>
+                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
+                  <div className="text-sm text-gray-300">Daily Made</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
-                  <div className="text-sm text-[#8B7355]">Quality</div>
+                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
+                  <div className="text-sm text-gray-300">Quality</div>
                 </div>
               </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -top-10 -right-10 w-full h-full bg-gradient-to-br from-[#D4A574]/20 to-[#B8864F]/20 rounded-3xl blur-2xl"></div>
-              <img
-                src="/images/Home.png"
-                alt="Martabak Alim"
-                className="relative rounded-3xl shadow-2xl w-full h-auto object-cover transform hover:scale-105 transition-transform duration-500"
-              />
             </div>
           </div>
         </section>
