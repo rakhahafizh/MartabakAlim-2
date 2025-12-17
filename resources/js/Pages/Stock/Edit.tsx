@@ -47,10 +47,21 @@ export default function StockEdit({ stock_item }: EditProps) {
       onError: (errors) => {
         setErrors(errors);
         setProcessing(false);
+
+        // Handle 419 CSRF token mismatch error
+        if (errors && typeof errors === 'object' && 'message' in errors) {
+          const errorMessage = String(errors.message || '');
+          if (errorMessage.includes('419') || errorMessage.includes('CSRF') || errorMessage.includes('expired')) {
+            alert('Session expired. Refreshing page...');
+            window.location.reload();
+          }
+        }
       },
       onFinish: () => {
         setProcessing(false);
-      }
+      },
+      preserveScroll: true,
+      preserveState: true
     });
   };
 

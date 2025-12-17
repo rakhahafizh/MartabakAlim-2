@@ -106,6 +106,16 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
     router.put(`/stock-opname/${editingItem.id}`, data, {
       onSuccess: () => {
         setEditingItem(null);
+      },
+      onError: (errors) => {
+        // Handle 419 CSRF token mismatch error
+        if (errors && typeof errors === 'object' && 'message' in errors) {
+          const errorMessage = String(errors.message || '');
+          if (errorMessage.includes('419') || errorMessage.includes('CSRF') || errorMessage.includes('expired')) {
+            alert('Session expired. Refreshing page...');
+            window.location.reload();
+          }
+        }
       }
     });
   };
