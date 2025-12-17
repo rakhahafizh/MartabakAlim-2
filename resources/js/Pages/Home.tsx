@@ -80,10 +80,10 @@ export default function Home() {
                 className="absolute inset-0 w-full h-full object-cover object-center"
                 style={{ objectPosition: 'center center' }}
               />
-              {/* Smooth Multi-layer Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/60 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7]/50 via-transparent to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent"></div>
+              {/* Ultra-Smooth Multi-layer Gradient Overlay - Extended Transition */}
+              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 via-white/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/3 via-transparent to-transparent"></div>
             </div>
           </div>
 
