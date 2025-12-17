@@ -4,7 +4,6 @@ import AppLayout from '@/Components/Layout/AppLayout';
 import Input from '@/Components/UI/Input';
 import Button from '@/Components/UI/Button';
 import { StockItem } from '@/types';
-import { saveFormData, restoreFormData, clearFormData, handleInertiaError } from '@/utils/errorHandler';
 
 interface EditProps {
   stock_item: StockItem;
@@ -32,26 +31,6 @@ export default function StockEdit({ stock_item }: EditProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
 
-  const FORM_KEY = `stock_edit_form_${stock_item.id}`;
-
-  // Restore form data on mount (in case of 419 error)
-  useEffect(() => {
-    const restored = restoreFormData(FORM_KEY);
-    if (restored) {
-      const shouldRestore = confirm('We found unsaved changes. Would you like to restore them?');
-      if (shouldRestore) {
-        setFormData(restored);
-      } else {
-        clearFormData(FORM_KEY);
-      }
-    }
-  }, []);
-
-  // Auto-save form data whenever it changes
-  useEffect(() => {
-    saveFormData(FORM_KEY, formData);
-  }, [formData]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
@@ -63,15 +42,11 @@ export default function StockEdit({ stock_item }: EditProps) {
 
     router.put(`/stock-opname/${stock_item.id}`, submitData, {
       onSuccess: () => {
-        // Clear saved form data on success
-        clearFormData(FORM_KEY);
         // Will redirect automatically
       },
       onError: (errors) => {
         setErrors(errors);
         setProcessing(false);
-        // Handle CSRF errors
-        handleInertiaError(errors);
       },
       onFinish: () => {
         setProcessing(false);
