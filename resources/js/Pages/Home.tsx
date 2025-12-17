@@ -70,7 +70,7 @@ export default function Home() {
         </nav>
 
         {/* Hero Section - Premium Split Screen Design */}
-        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F1E8] to-[#EBE4D5]">
+        <section className="relative pt-20 min-h-screen flex items-center overflow-hidden bg-white">
           {/* Background Image - 60% Right Side */}
           <div className="absolute top-0 right-0 w-[60%] h-full">
             <div className="relative w-full h-full">
