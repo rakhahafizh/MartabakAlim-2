@@ -78,8 +78,9 @@ export default function Home() {
               alt="Martabak Alim"
               className="w-full h-full object-cover"
             />
-            {/* Gradient Overlay - Dark from left, transparent to right */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#2C2416]/95 via-[#2C2416]/70 to-transparent"></div>
+            {/* Multi-layer Gradient Overlay for smooth transition */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50"></div>
           </div>
 
           {/* Content */}
@@ -89,7 +90,7 @@ export default function Home() {
                 <span className="text-sm font-semibold text-[#D4A574] tracking-wider">AUTHENTIC BEKASI TASTE</span>
               </div>
 
-              <h1 className="text-6xl lg:text-8xl font-black text-white leading-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h1 className="text-6xl lg:text-8xl font-black text-white leading-tight drop-shadow-2xl" style={{ fontFamily: 'Playfair Display, serif' }}>
                 MARTABAK
                 <br />
                 <span className="text-[#D4A574]">HANDMADE</span>
@@ -97,7 +98,7 @@ export default function Home() {
                 PERFECTION
               </h1>
 
-              <p className="text-xl text-gray-200 leading-relaxed max-w-xl">
+              <p className="text-xl text-gray-100 leading-relaxed max-w-xl drop-shadow-lg">
                 Dibuat oleh orang-orang profesional dan berpengalaman. Semua makanan terbuat dari bahan berkualitas dan tentunya halal.
               </p>
 
@@ -113,24 +114,24 @@ export default function Home() {
                 </a>
                 <a
                   href="#menu"
-                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-bold text-lg rounded-lg hover:bg-white hover:text-[#2C2416] transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white/80 text-white font-bold text-lg rounded-lg hover:bg-white hover:text-[#2C2416] transition-all duration-300 backdrop-blur-sm"
                 >
                   VIEW MENU
                 </a>
               </div>
 
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/30">
                 <div>
-                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
-                  <div className="text-sm text-gray-300">Halal</div>
+                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>100%</div>
+                  <div className="text-sm text-gray-200">Halal</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
-                  <div className="text-sm text-gray-300">Daily Made</div>
+                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>Fresh</div>
+                  <div className="text-sm text-gray-200">Daily Made</div>
                 </div>
                 <div>
-                  <div className="text-4xl font-bold text-[#D4A574]" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
-                  <div className="text-sm text-gray-300">Quality</div>
+                  <div className="text-4xl font-bold text-[#D4A574] drop-shadow-lg" style={{ fontFamily: 'Playfair Display, serif' }}>5★</div>
+                  <div className="text-sm text-gray-200">Quality</div>
                 </div>
               </div>
             </div>
