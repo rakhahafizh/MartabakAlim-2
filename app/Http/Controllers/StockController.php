@@ -34,18 +34,20 @@ class StockController extends Controller
 
         $stockItems = $query->orderBy('item_id')->paginate(10);
 
-        // Dashboard Statistics
+        // Dashboard Statistics - Equipment Focused
         $stats = [
             'total_items' => StockItem::count(),
-            'low_stock_count' => StockItem::where('system_qty', '<', 10)->count(),
+            'available_count' => StockItem::where('system_qty', '>', 0)->count(),
             'categories_count' => StockItem::distinct('category')->count('category'),
             'pending_count' => StockItem::where('status', 'pending')->count(),
+            'checked_count' => StockItem::where('status', 'checked')->count(),
+            'discrepancy_count' => StockItem::whereRaw('physical_qty != system_qty')->whereNotNull('physical_qty')->count(),
         ];
 
-        // Low Stock Items (for alerts)
-        $lowStockItems = StockItem::where('system_qty', '<', 10)
-            ->orderBy('system_qty', 'asc')
-            ->limit(5)
+        // Category Breakdown (per kategori)
+        $categoryBreakdown = StockItem::select('category')
+            ->selectRaw('count(*) as count')
+            ->groupBy('category')
             ->get();
 
         // Location Breakdown (per lokasi)
@@ -57,7 +59,7 @@ class StockController extends Controller
         return Inertia::render('Stock/Index', [
             'stock_items' => $stockItems,
             'stats' => $stats,
-            'low_stock_items' => $lowStockItems,
+            'category_breakdown' => $categoryBreakdown,
             'location_breakdown' => $locationBreakdown,
             'filters' => [
                 'search' => $request->get('search'),

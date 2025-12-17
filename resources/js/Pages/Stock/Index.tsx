@@ -9,9 +9,11 @@ import { PageProps, StockItem } from '@/types';
 
 interface DashboardStats {
   total_items: number;
-  low_stock_count: number;
+  available_count: number;
   categories_count: number;
   pending_count: number;
+  checked_count: number;
+  discrepancy_count: number;
 }
 
 interface LocationBreakdown {
@@ -19,10 +21,15 @@ interface LocationBreakdown {
   count: number;
 }
 
+interface CategoryBreakdown {
+  category: string;
+  count: number;
+}
+
 interface StockIndexProps extends PageProps {
   stock_items: any;
   stats: DashboardStats;
-  low_stock_items: StockItem[];
+  category_breakdown: CategoryBreakdown[];
   location_breakdown: LocationBreakdown[];
   filters: {
     search?: string;
@@ -63,7 +70,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, bgColor,
   </div>
 );
 
-export default function StockIndex({ stock_items, stats, low_stock_items, location_breakdown, filters, flash }: StockIndexProps) {
+export default function StockIndex({ stock_items, stats, category_breakdown, location_breakdown, filters, flash }: StockIndexProps) {
   const [editingItem, setEditingItem] = useState<StockItem | null>(null);
   const [search, setSearch] = useState(filters.search || '');
   const [categoryFilter, setCategoryFilter] = useState(filters.category || '');
@@ -131,7 +138,7 @@ export default function StockIndex({ stock_items, stats, low_stock_items, locati
         {/* Dashboard Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Dashboard Stock Opname</h1>
-          <p className="text-gray-600">Overview inventory dan statistik Martabak Alim</p>
+          <p className="text-gray-600">Overview inventory peralatan dan tracking lokasi</p>
         </div>
 
         {/* Statistics Cards */}
@@ -145,16 +152,17 @@ export default function StockIndex({ stock_items, stats, low_stock_items, locati
             onClick={() => handleReset()}
           />
           <StatCard
-            title="Low Stock"
-            value={stats.low_stock_count}
-            icon={<span>⚠️</span>}
-            color="text-red-500"
+            title="Available"
+            value={stats.available_count}
+            icon={<span>✅</span>}
+            color="text-green-500"
             bgColor="bg-white"
             onClick={() => {
               setSearch('');
               setCategoryFilter('');
               setStatusFilter('');
-              // Could add a low stock filter here
+              setLocationFilter('');
+              handleSearch();
             }}
           />
           <StatCard
@@ -163,6 +171,20 @@ export default function StockIndex({ stock_items, stats, low_stock_items, locati
             icon={<span>📊</span>}
             color="text-blue-500"
             bgColor="bg-white"
+          />
+          <StatCard
+            title="Verified"
+            value={stats.checked_count}
+            icon={<span>📋</span>}
+            color="text-blue-600"
+            bgColor="bg-white"
+            onClick={() => {
+              setSearch('');
+              setCategoryFilter('');
+              setStatusFilter('checked');
+              setLocationFilter('');
+              handleSearch();
+            }}
           />
           <StatCard
             title="Pending"
@@ -174,38 +196,37 @@ export default function StockIndex({ stock_items, stats, low_stock_items, locati
               setSearch('');
               setCategoryFilter('');
               setStatusFilter('pending');
+              setLocationFilter('');
               handleSearch();
             }}
           />
         </div>
 
-        {/* Low Stock Alerts & Category Breakdown */}
+        {/* Category & Location Breakdown */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Low Stock Alert */}
-          {low_stock_items && low_stock_items.length > 0 && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <svg className="w-6 h-6 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                <h3 className="font-bold text-red-800 text-lg">Low Stock Alert</h3>
-              </div>
-              <div className="space-y-2">
-                {low_stock_items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between bg-white p-3 rounded-md">
-                    <div>
-                      <p className="font-medium text-gray-900">{item.item_name}</p>
-                      <p className="text-sm text-gray-600">{item.category}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-red-600">{item.system_qty} {item.unit}</p>
-                      <p className="text-xs text-gray-500">Low Stock</p>
-                    </div>
+          {/* Category Breakdown */}
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <h3 className="font-bold text-gray-900 text-lg mb-4 flex items-center">
+              <span className="mr-2">📊</span>
+              Category Breakdown
+            </h3>
+            <div className="space-y-3">
+              {category_breakdown && category_breakdown.map((cat) => (
+                <div key={cat.category}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-gray-700">{cat.category}</span>
+                    <span className="text-sm font-bold text-[#D4A574]">{cat.count} items</span>
                   </div>
-                ))}
-              </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-[#D4A574] to-[#B8864F] h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${(cat.count / stats.total_items) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
 
           {/* Location Breakdown */}
           <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
