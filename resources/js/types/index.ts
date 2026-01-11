@@ -5,6 +5,7 @@ export interface StockItem {
   category: string;
   unit: string;
   system_qty: number;
+  default_stock: number;
   physical_qty: number | null;
   difference: number;
   status: 'pending' | 'checked' | 'adjusted';

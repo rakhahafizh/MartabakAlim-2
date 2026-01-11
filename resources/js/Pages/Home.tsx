@@ -1,36 +1,42 @@
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Home() {
-  const [selectedBranch, setSelectedBranch] = useState('tambun');
+interface Location {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  opening_time: string;
+  closing_time: string;
+  map_embed_url: string;
+  gofood_url?: string;
+  shopeefood_url?: string;
+  grab_url?: string;
+  is_active: boolean;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image_path: string;
+  category: string;
+  badge: string;
+  is_featured: boolean;
+  order: number;
+}
+
+interface HomeProps {
+  locations: Location[];
+  products: Product[];
+}
+
+export default function Home({ locations = [], products = [] }: HomeProps) {
+  const [selectedBranch, setSelectedBranch] = useState(locations[0]?.id || null);
   const [showMenuPDF, setShowMenuPDF] = useState(false);
 
-  const products = [
-    {
-      name: 'Martabak Manis Jumbo Durian Keju',
-      description: 'Martabak manis yang memiliki durian dan keju sebagai toppingnya.',
-      price: 'Rp. 60.000',
-      image: '/images/DK.png',
-      category: 'Signature',
-      badge: 'Best Seller'
-    },
-    {
-      name: 'Martabak Manis Pandan Keju',
-      description: 'Martabak manis berwarna hijau beraroma pandan dengan keju.',
-      price: 'Rp. 41.000',
-      image: '/images/PK.png',
-      category: 'Classic',
-      badge: 'Recommended'
-    },
-    {
-      name: 'Martabak Telor Daging Ayam',
-      description: 'Martabak telor premium dengan isian telur utuh dan daging ayam.',
-      price: 'Rp. 40.000',
-      image: '/images/TA.png',
-      category: 'Savory',
-      badge: 'Best Seller'
-    }
-  ];
+  const selectedLocation = locations.find(loc => loc.id === selectedBranch) || locations[0];
 
   return (
     <>
@@ -160,14 +166,14 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product, index) => (
+              {products.map((product) => (
                 <div
-                  key={index}
+                  key={product.id}
                   className="group bg-[#FDFBF7] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 flex flex-col h-full"
                 >
                   <div className="relative h-72 overflow-hidden bg-gradient-to-br from-[#F5F1E8] to-[#EBE4D5]">
                     <img
-                      src={product.image}
+                      src={product.image_path}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -188,7 +194,6 @@ export default function Home() {
                         ? 'bg-gradient-to-r from-[#D4A574] to-[#B8864F] text-white'
                         : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                         }`}>
-                        {product.badge === 'Best Seller'}
                         {product.badge}
                       </div>
                     </div>
@@ -236,15 +241,21 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#D4A574] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>15:00</div>
+                  <div className="text-4xl font-bold text-[#D4A574] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    {selectedLocation?.opening_time || '15:00'}
+                  </div>
                   <div className="text-sm text-gray-300">Opening</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <div className="text-4xl font-bold text-[#D4A574] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>23:30</div>
+                  <div className="text-4xl font-bold text-[#D4A574] mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    {selectedLocation?.closing_time || '23:30'}
+                  </div>
                   <div className="text-sm text-gray-300">Closing</div>
                 </div>
                 <div className="col-span-2 bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <div className="text-2xl font-bold text-white mb-2">+62 812 2932 6653</div>
+                  <div className="text-2xl font-bold text-white mb-2">
+                    {selectedLocation?.phone || '+62 812 2932 6653'}
+                  </div>
                   <div className="text-sm text-gray-300">Contact Us</div>
                 </div>
               </div>
@@ -256,55 +267,40 @@ export default function Home() {
                 <h3 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
                   LOKASI KAMI
                 </h3>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => setSelectedBranch('tambun')}
-                    className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${selectedBranch === 'tambun'
-                      ? 'bg-[#D4A574] text-[#2C2416]'
-                      : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                  >
-                    📍 Tambun
-                  </button>
-                  <button
-                    onClick={() => setSelectedBranch('cikarang')}
-                    className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${selectedBranch === 'cikarang'
-                      ? 'bg-[#D4A574] text-[#2C2416]'
-                      : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                  >
-                    📍 Cikarang
-                  </button>
-                </div>
+                {locations.length > 0 && (
+                  <div className="flex justify-center gap-4 flex-wrap">
+                    {locations.map((location) => (
+                      <button
+                        key={location.id}
+                        onClick={() => setSelectedBranch(location.id)}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                          selectedBranch === location.id
+                            ? 'bg-[#D4A574] text-[#2C2416]'
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        📍 {location.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Google Maps Embed */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 overflow-hidden">
-                {selectedBranch === 'tambun' ? (
-
+              {selectedLocation && (
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 overflow-hidden">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d247.87759540160283!2d107.07329818650307!3d-6.258260399058733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698fa36c8040c9%3A0x9cdaff6d01c3634c!2sMartabak%20Alim!5e0!3m2!1sen!2sid!4v1765659466959!5m2!1sen!2sid"
+                    src={selectedLocation.map_embed_url}
                     width="100%"
                     height="400"
                     style={{ border: 0, borderRadius: '12px' }}
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Martabak Alim Tambun Location"
+                    title={`Martabak Alim ${selectedLocation.name} Location`}
                   ></iframe>
-                ) : (
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7931.98649809519!2d107.1825953691671!3d-6.264617022326239!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6984a2d0d4f555%3A0xddee7e1ad9bc6ab5!2sMARTABAK%20ALIM!5e0!3m2!1sen!2sid!4v1765984820396!5m2!1sen!2sid"
-                    width="100%"
-                    height="400"
-                    style={{ border: 0, borderRadius: '12px' }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Martabak Alim Cikarang Location"
-                  ></iframe>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -324,73 +320,61 @@ export default function Home() {
             {/* Branch Selection */}
             <div className="mb-8">
               <p className="text-white/90 mb-4 font-medium">Pilih Cabang:</p>
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={() => setSelectedBranch('tambun')}
-                  className={`px-8 py-3 rounded-lg font-bold transition-all duration-300 ${selectedBranch === 'tambun'
-                    ? 'bg-white text-[#2C2416] shadow-xl'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                    }`}
-                >
-                  📍 Tambun
-                </button>
-                <button
-                  onClick={() => setSelectedBranch('cikarang')}
-                  className={`px-8 py-3 rounded-lg font-bold transition-all duration-300 ${selectedBranch === 'cikarang'
-                    ? 'bg-white text-[#2C2416] shadow-xl'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                    }`}
-                >
-                  📍 Cikarang
-                </button>
-              </div>
+              {locations.length > 0 && (
+                <div className="flex justify-center gap-4 flex-wrap">
+                  {locations.map((location) => (
+                    <button
+                      key={location.id}
+                      onClick={() => setSelectedBranch(location.id)}
+                      className={`px-8 py-3 rounded-lg font-bold transition-all duration-300 ${
+                        selectedBranch === location.id
+                          ? 'bg-white text-[#2C2416] shadow-xl'
+                          : 'bg-white/20 text-white hover:bg-white/30'
+                      }`}
+                    >
+                      📍 {location.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Order Buttons - Tambun */}
-            {selectedBranch === 'tambun' && (
+            {/* Order Buttons - Dynamic based on selected location */}
+            {selectedLocation && (
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="https://gofood.link/a/yMa2My1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/gojek.png" alt="Gojek" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI GOJEK</span>
-                </a>
-                <a
-                  href="https://shopee.co.id/universal-link/now-food/shop/1008047?deep_and_deferred=1&shareChannel=copy_link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/shopee.png" alt="Shopee" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI SHOPEEFOOD</span>
-                </a>
-                <a
-                  href="https://r.grab.com/g/6-20251217_192822_D8D406FF00744A5BAFC7186724209326_MEXMPS-6-C2CUCXNUBE5JVA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/grab.png" alt="Grab" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI GRAB</span>
-                </a>
-              </div>
-            )}
-
-            {/* Order Buttons - Cikarang */}
-            {selectedBranch === 'cikarang' && (
-              <div className="flex justify-center">
-                <a
-                  href="https://gofood.link/u/R1jrR"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-                >
-                  <img src="/images/gojek.png" alt="Gojek" className="h-5 w-auto mr-3" />
-                  <span>PESAN DI GOJEK</span>
-                </a>
+                {selectedLocation.gofood_url && (
+                  <a
+                    href={selectedLocation.gofood_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  >
+                    <img src="/images/gojek.png" alt="Gojek" className="h-5 w-auto mr-3" />
+                    <span>PESAN DI GOJEK</span>
+                  </a>
+                )}
+                {selectedLocation.shopeefood_url && (
+                  <a
+                    href={selectedLocation.shopeefood_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  >
+                    <img src="/images/shopee.png" alt="Shopee" className="h-5 w-auto mr-3" />
+                    <span>PESAN DI SHOPEEFOOD</span>
+                  </a>
+                )}
+                {selectedLocation.grab_url && (
+                  <a
+                    href={selectedLocation.grab_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#2C2416] font-bold text-base rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                  >
+                    <img src="/images/grab.png" alt="Grab" className="h-5 w-auto mr-3" />
+                    <span>PESAN DI GRAB</span>
+                  </a>
+                )}
               </div>
             )}
           </div>

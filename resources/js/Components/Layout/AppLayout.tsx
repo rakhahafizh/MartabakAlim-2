@@ -35,19 +35,47 @@ export default function AppLayout({ children, title = 'Stock Opname' }: AppLayou
         <nav className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
-              <div className="flex items-center space-x-4">
-                <img
-                  src="/images/alim-logo.png"
-                  alt="Alim"
-                  className="h-10 w-auto"
-                />
-                <h1 className="text-xl font-semibold text-gray-900">
-                  Martabak Alim Stock Opname
-                </h1>
+              <div className="flex items-center space-x-8">
+                <div className="flex items-center space-x-4">
+                  <img
+                    src="/images/alim-logo.png"
+                    alt="Alim"
+                    className="h-10 w-auto"
+                  />
+                  <h1 className="text-xl font-semibold text-gray-900">
+                    Martabak Alim
+                  </h1>
+                </div>
+                <div className="hidden md:flex items-center space-x-1">
+                  <Link
+                    href="/stock-opname"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#D4A574] hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Stock Opname
+                  </Link>
+                  <Link
+                    href="/locations"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#D4A574] hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Locations
+                  </Link>
+                  <Link
+                    href="/products"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#D4A574] hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Products
+                  </Link>
+                  <Link
+                    href="/vendors"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#D4A574] hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    Vendors
+                  </Link>
+                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-500">
-                  Martabak Alim Inventory
+                  Admin Panel
                 </span>
                 <button
                   onClick={handleLogout}

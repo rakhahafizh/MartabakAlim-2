@@ -4,36 +4,55 @@ import AppLayout from '@/Components/Layout/AppLayout';
 import Input from '@/Components/UI/Input';
 import Button from '@/Components/UI/Button';
 
+interface Location {
+  id: number;
+  name: string;
+  address: string;
+}
+
 interface CreateFormData {
   item_code: string;
   item_name: string;
   category: string;
   unit: string;
   system_qty: string; // Changed from number to string
+  default_stock: string;
   location: string;
 }
 
-export default function StockCreate() {
+interface StockCreateProps {
+  locations: Location[];
+}
+
+export default function StockCreate({ locations }: StockCreateProps) {
   const [formData, setFormData] = useState<CreateFormData>({
     item_code: '',
     item_name: '',
     category: '',
     unit: '',
     system_qty: '', // Changed from 0 to empty string
+    default_stock: '',
     location: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
+  const [isCustomLocation, setIsCustomLocation] = useState(false);
+  const [customLocation, setCustomLocation] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
 
+    // Use custom location if "other" is selected
+    const locationValue = isCustomLocation ? customLocation : formData.location;
+
     // Convert system_qty to number before sending
     const submitData = {
       ...formData,
-      system_qty: parseFloat(formData.system_qty) || 0
+      location: locationValue,
+      system_qty: parseFloat(formData.system_qty) || 0,
+      default_stock: parseFloat(formData.default_stock) || 0
     };
 
     router.post('/stock-opname', submitData, {
@@ -174,23 +193,78 @@ export default function StockCreate() {
                   required
                 />
 
+                <Input
+                  label="Stock Default"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0"
+                  value={formData.default_stock}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    default_stock: e.target.value
+                  })}
+                  error={errors.default_stock}
+                  required
+                />
+
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Lokasi *
                   </label>
-                  <select
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4A574]"
-                    value={formData.location}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      location: e.target.value
-                    })}
-                    required
-                  >
-                    <option value="">Pilih Lokasi</option>
-                    <option value="Tambun">Tambun</option>
-                    <option value="Cikarang">Cikarang</option>
-                  </select>
+                  {!isCustomLocation ? (
+                    <>
+                      <select
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4A574]"
+                        value={formData.location}
+                        onChange={(e) => {
+                          if (e.target.value === 'other') {
+                            setIsCustomLocation(true);
+                            setFormData({
+                              ...formData,
+                              location: ''
+                            });
+                          } else {
+                            setFormData({
+                              ...formData,
+                              location: e.target.value
+                            });
+                          }
+                        }}
+                        required
+                      >
+                        <option value="">Pilih Lokasi</option>
+                        {locations && locations.map((location) => (
+                          <option key={location.id} value={location.name}>
+                            {location.name}
+                          </option>
+                        ))}
+                        <option value="other">+ Lokasi Baru</option>
+                      </select>
+                    </>
+                  ) : (
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4A574]"
+                        placeholder="Masukkan nama lokasi baru"
+                        value={customLocation}
+                        onChange={(e) => setCustomLocation(e.target.value)}
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() => {
+                          setIsCustomLocation(false);
+                          setCustomLocation('');
+                        }}
+                        className="px-3"
+                      >
+                        Batal
+                      </Button>
+                    </div>
+                  )}
                   {errors.location && (
                     <p className="mt-1 text-sm text-red-600">{errors.location}</p>
                   )}

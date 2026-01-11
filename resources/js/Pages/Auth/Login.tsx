@@ -1,5 +1,5 @@
 import React, { FormEventHandler } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 
 export default function Login() {
     const { data, setData, post, processing, errors } = useForm({
@@ -9,7 +9,11 @@ export default function Login() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post('/login');
+        post('/login', {
+            onSuccess: () => {
+                router.visit('/stock-opname');
+            },
+        });
     };
 
     return (

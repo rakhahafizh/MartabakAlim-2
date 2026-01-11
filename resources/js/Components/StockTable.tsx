@@ -22,6 +22,42 @@ export default function StockTable({ items, onEdit }: StockTableProps) {
     );
   };
 
+  const getAvailabilityBadge = (item: StockItem) => {
+    // Pending: newly added stock with no physical qty
+    if (item.physical_qty === null) {
+      return (
+        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+          Pending
+        </span>
+      );
+    }
+
+    // Stock Berlebih: physical_qty > 150% of default_stock
+    if (item.physical_qty > (item.default_stock * 1.5)) {
+      return (
+        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+          Stock Berlebih
+        </span>
+      );
+    }
+
+    // Hampir Habis: physical_qty < 50% of default_stock
+    if (item.physical_qty < (item.default_stock / 2)) {
+      return (
+        <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+          Hampir Habis
+        </span>
+      );
+    }
+
+    // Tersedia: physical_qty >= 50% and <= 150% of default_stock
+    return (
+      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        Tersedia
+      </span>
+    );
+  };
+
   const getDifferenceBadge = (difference: number) => {
     if (difference === 0) {
       return <span className="text-green-600 font-medium">0</span>;
@@ -71,6 +107,9 @@ export default function StockTable({ items, onEdit }: StockTableProps) {
                 System Qty
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Default Stock
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Physical Qty
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -100,10 +139,13 @@ export default function StockTable({ items, onEdit }: StockTableProps) {
                   {item.system_qty} {item.unit}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {item.default_stock} {item.unit}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {item.physical_qty !== null ? `${item.physical_qty} ${item.unit}` : '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {getStatusBadge(item.status)}
+                  {getAvailabilityBadge(item)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <div className="flex gap-2">

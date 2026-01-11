@@ -15,6 +15,7 @@ interface EditFormData {
   category: string;
   unit: string;
   system_qty: string;
+  default_stock: string;
   location: string;
 }
 
@@ -25,6 +26,7 @@ export default function StockEdit({ stock_item }: EditProps) {
     category: stock_item.category,
     unit: stock_item.unit,
     system_qty: stock_item.system_qty.toString(),
+    default_stock: stock_item.default_stock?.toString?.() ?? String(stock_item.default_stock ?? 0),
     location: stock_item.location
   });
 
@@ -37,7 +39,8 @@ export default function StockEdit({ stock_item }: EditProps) {
 
     const submitData = {
       ...formData,
-      system_qty: parseFloat(formData.system_qty) || 0
+      system_qty: parseFloat(formData.system_qty) || 0,
+      default_stock: parseFloat(formData.default_stock) || 0
     };
 
     router.put(`/stock-opname/${stock_item.id}`, submitData, {
@@ -174,6 +177,21 @@ export default function StockEdit({ stock_item }: EditProps) {
                     system_qty: e.target.value
                   })}
                   error={errors.system_qty}
+                  required
+                />
+
+                <Input
+                  label="Stock Default"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0"
+                  value={formData.default_stock}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    default_stock: e.target.value
+                  })}
+                  error={errors.default_stock}
                   required
                 />
 

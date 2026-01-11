@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class StockItem extends Model
 {
@@ -15,6 +16,7 @@ class StockItem extends Model
         'category',
         'unit',
         'system_qty',
+        'default_stock',
         'physical_qty',
         'difference',
         'status',
@@ -24,6 +26,7 @@ class StockItem extends Model
 
     protected $casts = [
         'system_qty' => 'decimal:2',
+        'default_stock' => 'decimal:2',
         'physical_qty' => 'decimal:2',
         'difference' => 'decimal:2',
     ];
@@ -36,5 +39,10 @@ class StockItem extends Model
                 $stockItem->difference = $stockItem->physical_qty - $stockItem->system_qty;
             }
         });
+    }
+
+    public function vendors(): BelongsToMany
+    {
+        return $this->belongsToMany(Vendor::class, 'vendor_stock_item');
     }
 }

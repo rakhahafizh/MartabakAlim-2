@@ -21,6 +21,14 @@ interface LocationBreakdown {
   count: number;
 }
 
+interface Location {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+  is_active: boolean;
+}
+
 interface CategoryBreakdown {
   category: string;
   count: number;
@@ -31,6 +39,7 @@ interface StockIndexProps extends PageProps {
   stats: DashboardStats;
   category_breakdown: CategoryBreakdown[];
   location_breakdown: LocationBreakdown[];
+  locations: Location[];
   filters: {
     search?: string;
     category?: string;
@@ -70,19 +79,35 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, bgColor,
   </div>
 );
 
-export default function StockIndex({ stock_items, stats, category_breakdown, location_breakdown, filters, flash }: StockIndexProps) {
+export default function StockIndex({ stock_items, stats, category_breakdown, location_breakdown, locations, filters, flash }: StockIndexProps) {
   const [editingItem, setEditingItem] = useState<StockItem | null>(null);
   const [search, setSearch] = useState(filters.search || '');
   const [categoryFilter, setCategoryFilter] = useState(filters.category || '');
   const [statusFilter, setStatusFilter] = useState(filters.status || '');
   const [locationFilter, setLocationFilter] = useState(filters.location || '');
+  const [activeLocationTab, setActiveLocationTab] = useState(filters.location || 'all');
 
   const handleSearch = () => {
+    const locationParam = activeLocationTab === 'all' ? '' : activeLocationTab;
     router.get('/stock-opname', {
       search,
       category: categoryFilter,
       status: statusFilter,
-      location: locationFilter
+      location: locationParam
+    }, {
+      preserveState: true,
+      preserveScroll: true
+    });
+  };
+
+  const handleLocationTabChange = (location: string) => {
+    setActiveLocationTab(location);
+    const locationParam = location === 'all' ? '' : location;
+    router.get('/stock-opname', {
+      search,
+      category: categoryFilter,
+      status: statusFilter,
+      location: locationParam
     }, {
       preserveState: true,
       preserveScroll: true
@@ -94,6 +119,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
     setCategoryFilter('');
     setStatusFilter('');
     setLocationFilter('');
+    setActiveLocationTab('all');
     router.get('/stock-opname', {}, {
       preserveState: true,
       preserveScroll: true
@@ -156,7 +182,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           <StatCard
             title="Total Items"
             value={stats.total_items}
-            icon={<span>📦</span>}
+            icon={<span></span>}
             color="text-[#D4A574]"
             bgColor="bg-white"
             onClick={() => handleReset()}
@@ -164,7 +190,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           <StatCard
             title="Available"
             value={stats.available_count}
-            icon={<span>✅</span>}
+            icon={<span></span>}
             color="text-green-500"
             bgColor="bg-white"
             onClick={() => {
@@ -178,14 +204,14 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           <StatCard
             title="Categories"
             value={stats.categories_count}
-            icon={<span>📊</span>}
+            icon={<span></span>}
             color="text-blue-500"
             bgColor="bg-white"
           />
           <StatCard
             title="Verified"
             value={stats.checked_count}
-            icon={<span>📋</span>}
+            icon={<span></span>}
             color="text-blue-600"
             bgColor="bg-white"
             onClick={() => {
@@ -199,7 +225,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           <StatCard
             title="Pending"
             value={stats.pending_count}
-            icon={<span>⏳</span>}
+            icon={<span></span>}
             color="text-orange-500"
             bgColor="bg-white"
             onClick={() => {
@@ -217,7 +243,6 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           {/* Category Breakdown */}
           <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
             <h3 className="font-bold text-gray-900 text-lg mb-4 flex items-center">
-              <span className="mr-2">📊</span>
               Category Breakdown
             </h3>
             <div className="space-y-3">
@@ -241,7 +266,6 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           {/* Location Breakdown */}
           <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
             <h3 className="font-bold text-gray-900 text-lg mb-4 flex items-center">
-              <span className="mr-2">📍</span>
               Location Breakdown
             </h3>
             <div className="space-y-3">
@@ -263,12 +287,55 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
           </div>
         </div>
 
+        {/* Location Tabs */}
+        <div className="mb-8 bg-white rounded-lg shadow-md border border-gray-200 p-2">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => handleLocationTabChange('all')}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                activeLocationTab === 'all'
+                  ? 'bg-gradient-to-r from-[#D4A574] to-[#B8864F] text-white shadow-md'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Semua Lokasi
+            </button>
+            {locations && locations.map((location) => {
+              const locationData = location_breakdown.find(lb => lb.location === location.name);
+              const count = locationData ? locationData.count : 0;
+              
+              if (count === 0) return null;
+              
+              return (
+                <button
+                  key={location.id}
+                  onClick={() => handleLocationTabChange(location.name)}
+                  className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                    activeLocationTab === location.name
+                      ? 'bg-gradient-to-r from-[#D4A574] to-[#B8864F] text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {location.name}
+                  <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Quick Actions & Header */}
         <div className="sm:flex sm:items-center justify-between mb-6">
           <div className="sm:flex-auto">
-            <h2 className="text-2xl font-bold text-gray-900">All Stock Items</h2>
+            <h2 className="text-2xl font-bold text-gray-900">
+              {activeLocationTab === 'all' ? 'All Stock Items' : `Stock Items - ${activeLocationTab}`}
+            </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Kelola dan pantau jumlah stock fisik untuk item inventory.
+              {activeLocationTab === 'all'
+                ? 'Kelola dan pantau jumlah stock fisik untuk item inventory.'
+                : `Kelola inventory untuk lokasi ${activeLocationTab}`}
             </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -285,7 +352,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
         </div>
 
         <div className="mb-6 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="md:col-span-2">
               <Input
                 placeholder="Cari item..."
@@ -323,17 +390,7 @@ export default function StockIndex({ stock_items, stats, category_breakdown, loc
               ))}
             </select>
 
-            <select
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4A574] transition-all"
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-            >
-              <option value="">Semua Lokasi</option>
-              <option value="Tambun">Tambun</option>
-              <option value="Cikarang">Cikarang</option>
-            </select>
-
-            <div className="flex gap-2">
+            <div className="flex gap-2 md:col-span-2">
               <Button
                 onClick={handleSearch}
                 className="flex-1 bg-gradient-to-r from-[#D4A574] to-[#B8864F] hover:from-[#B8864F] hover:to-[#9A6F3F]"

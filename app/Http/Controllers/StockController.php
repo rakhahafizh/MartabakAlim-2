@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StockItem;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -50,17 +51,23 @@ class StockController extends Controller
             ->groupBy('category')
             ->get();
 
-        // Location Breakdown (per lokasi)
-        $locationBreakdown = StockItem::select('location')
-            ->selectRaw('count(*) as count')
-            ->groupBy('location')
-            ->get();
+        // Get all active locations from Location model with stock count
+        $locations = Location::where('is_active', true)->orderBy('name')->get();
+        $locationBreakdown = $locations->map(function ($location) {
+            return [
+                'location' => $location->name,
+                'count' => StockItem::where('location', $location->name)->count()
+            ];
+        })->filter(function ($item) {
+            return $item['count'] > 0; // Only show locations with stock items
+        })->values();
 
         return Inertia::render('Stock/Index', [
             'stock_items' => $stockItems,
             'stats' => $stats,
             'category_breakdown' => $categoryBreakdown,
             'location_breakdown' => $locationBreakdown,
+            'locations' => $locations,
             'filters' => [
                 'search' => $request->get('search'),
                 'category' => $request->get('category'),
@@ -76,7 +83,11 @@ class StockController extends Controller
 
     public function create()
     {
-        return Inertia::render('Stock/Create');
+        $locations = Location::where('is_active', true)->orderBy('name')->get();
+        
+        return Inertia::render('Stock/Create', [
+            'locations' => $locations
+        ]);
     }
 
     public function store(Request $request)
@@ -87,6 +98,7 @@ class StockController extends Controller
             'category' => 'required|string',
             'unit' => 'required|string',
             'system_qty' => 'required|numeric|min:0',
+            'default_stock' => 'required|numeric|min:0',
             'location' => 'required|string|max:255'
         ]);
 
@@ -96,6 +108,7 @@ class StockController extends Controller
             'category' => $request->category,
             'unit' => $request->unit,
             'system_qty' => $request->system_qty,
+            'default_stock' => $request->default_stock,
             'location' => $request->location,
             'status' => 'pending'
         ]);
@@ -140,6 +153,7 @@ class StockController extends Controller
                 'category' => 'required|string',
                 'unit' => 'required|string',
                 'system_qty' => 'required|numeric|min:0',
+                'default_stock' => 'required|numeric|min:0',
                 'location' => 'required|string|max:255'
             ]);
 
@@ -154,6 +168,7 @@ class StockController extends Controller
                 'category' => $request->category,
                 'unit' => $request->unit,
                 'system_qty' => $request->system_qty,
+                'default_stock' => $request->default_stock,
                 'location' => $request->location,
             ];
             
