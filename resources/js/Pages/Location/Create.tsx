@@ -32,12 +32,6 @@ export default function LocationCreate() {
     return input.trim();
   };
 
-  // Convert embed URL to working Google Maps link
-  const convertToWorkingLink = (embedUrl: string): string => {
-    if (!embedUrl) return '';
-    return embedUrl.replace('/maps/embed?', '/maps?');
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setProcessing(true);
@@ -57,11 +51,10 @@ export default function LocationCreate() {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
-    // Auto-extract URL from iframe and convert to working link
+    // Auto-extract URL from iframe embed code
     let processedValue = value;
     if (name === 'map_embed_url') {
-      const extracted = extractEmbedUrl(value);
-      processedValue = convertToWorkingLink(extracted);
+      processedValue = extractEmbedUrl(value);
     }
 
     setFormData(prev => ({
