@@ -38,7 +38,6 @@ export default function LocationEdit({ location }: LocationEditProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processing, setProcessing] = useState(false);
-  const [copySuccess, setCopySuccess] = useState(false);
 
   // Extract URL from iframe embed code
   const extractEmbedUrl = (input: string): string => {
@@ -55,20 +54,6 @@ export default function LocationEdit({ location }: LocationEditProps) {
   const convertToWorkingLink = (embedUrl: string): string => {
     if (!embedUrl) return '';
     return embedUrl.replace('/maps/embed?', '/maps?');
-  };
-
-  // Copy working link to clipboard
-  const copyWorkingLink = async () => {
-    const workingLink = convertToWorkingLink(formData.map_embed_url);
-    if (!workingLink) return;
-
-    try {
-      await navigator.clipboard.writeText(workingLink);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -90,10 +75,11 @@ export default function LocationEdit({ location }: LocationEditProps) {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
-    // Auto-extract URL from iframe if pasting into map_embed_url field
+    // Auto-extract URL from iframe and convert to working link
     let processedValue = value;
     if (name === 'map_embed_url') {
-      processedValue = extractEmbedUrl(value);
+      const extracted = extractEmbedUrl(value);
+      processedValue = convertToWorkingLink(extracted);
     }
 
     setFormData(prev => ({
@@ -217,7 +203,7 @@ export default function LocationEdit({ location }: LocationEditProps) {
             {/* Map Embed URL */}
             <div>
               <label htmlFor="map_embed_url" className="block text-sm font-medium text-gray-700 mb-2">
-                Google Maps Embed URL <span className="text-red-500">*</span>
+                Google Maps URL <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="map_embed_url"
@@ -225,54 +211,14 @@ export default function LocationEdit({ location }: LocationEditProps) {
                 value={formData.map_embed_url}
                 onChange={handleChange}
                 rows={3}
-                placeholder="Paste full iframe code or embed URL here..."
+                placeholder="Paste Google Maps embed code or URL here..."
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4A574] font-mono text-xs ${errors.map_embed_url ? 'border-red-500' : 'border-gray-300'
                   }`}
               />
               {errors.map_embed_url && <p className="mt-1 text-sm text-red-600">{errors.map_embed_url}</p>}
               <p className="mt-1 text-xs text-gray-500">
-                💡 Buka Google Maps → Klik Share → Embed a map → Copy HTML (paste langsung di sini, akan auto-extract URL-nya)
+                Buka Google Maps → Klik Share → Embed a map → Copy HTML dan paste di sini
               </p>
-
-              {/* Working Link Preview & Copy Button */}
-              {formData.map_embed_url && (
-                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-md">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1">
-                      <p className="text-xs font-semibold text-green-800 mb-1">✅ Working Link:</p>
-                      <a
-                        href={convertToWorkingLink(formData.map_embed_url)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-green-700 hover:text-green-900 underline break-all font-mono"
-                      >
-                        {convertToWorkingLink(formData.map_embed_url)}
-                      </a>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={copyWorkingLink}
-                      className="flex-shrink-0 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-md transition-colors flex items-center gap-1.5"
-                    >
-                      {copySuccess ? (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          Copied!
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          Copy Link
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Order URLs */}
